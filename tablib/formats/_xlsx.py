@@ -33,6 +33,7 @@ def detect(stream):
     except openpyxl.shared.exc.InvalidFileException:
         pass
 
+
 def export_set(dataset, freeze_panes=True):
     """Returns XLSX representation of Dataset."""
 
@@ -52,7 +53,7 @@ def export_book(databook, freeze_panes=True):
 
     wb = Workbook()
     for sheet in wb.worksheets:
-        wb.remove_sheet(sheet)
+        wb.remove(sheet)
     for i, dset in enumerate(databook._datasets):
         ws = wb.create_sheet()
         ws.title = dset.title if dset.title else 'Sheet%s' % (i)
@@ -119,6 +120,7 @@ def dset_sheet(dataset, ws, freeze_panes=True):
         row_number = i + 1
         for j, col in enumerate(row):
             col_idx = get_column_letter(j + 1)
+            # cell = ws.cell('%s%s' % (col_idx, row_number))
             cell = ws['%s%s' % (col_idx, row_number)]
 
             # bold headers
@@ -129,7 +131,7 @@ def dset_sheet(dataset, ws, freeze_panes=True):
                 if freeze_panes:
                     #  Export Freeze only after first Line
                     ws.freeze_panes = 'A2'
-                    
+
             # bold separators
             elif len(row) < dataset.width:
                 cell.value = unicode('%s' % col, errors='ignore')
